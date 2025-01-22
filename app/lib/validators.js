@@ -1,4 +1,4 @@
-import { Description } from "@radix-ui/react-dialog";
+
 import { z } from "zod";
 
 export const projectSchema = z.object({
@@ -15,3 +15,17 @@ export const projectSchema = z.object({
     .max(500, "Description must be 500 characters or less")
     .optional(),
 });
+
+export const sprintSchema = z.object({
+  name: z.string().min(1, "Sprint name is required"),
+  startDate: z.date(),
+  endDate: z.date()
+})
+
+
+export const issueSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  assigneeId: z.string().cuid("Please select assignee"),
+  description: z.string().optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"])
+})
