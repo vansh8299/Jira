@@ -45,6 +45,10 @@ const SprintBoard = ({ sprints, projectId, orgId }) => {
 
   const [filteredIssues, setFilteredIssues] = useState(issues);
 
+  const handleFilterChange = (newFilteredIssues) => {
+    setFilteredIssues(newFilteredIssues)
+  }
+
   useEffect(() => {
     if (currentSprint.id) {
       fetchIssues(currentSprint.id);
@@ -129,6 +133,10 @@ console.log(issues)
         projectId={projectId}
       />
 
+      {issues && !issuesLoading && (
+        <BoardFilters />
+      )}
+
       {updateIssuesError && (
         <p className="text-red-500 mt-2">{updateIssuesError.message}</p>
       )}
@@ -166,7 +174,17 @@ console.log(issues)
                             {...provided.dragHandleProps}
                             
                           >
-                            <IssueCard issue={issue}/>
+                            <IssueCard issue={issue}
+                            onDelete={()=> fetchIssues(currentSprint.id)}
+                            onUpdate={(updated) => 
+                              setIssues((issues) => 
+                              issues.map((issue) => {
+                                if(issue.id === updated.id)
+                                  return updated;
+                                return issue
+                              }))
+                            }
+                            />
                             </div>
                         )}
 

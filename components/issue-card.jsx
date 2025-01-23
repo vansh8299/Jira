@@ -24,12 +24,12 @@ const IssueCard = ({issue, showStatus = false, onDelete = () => {}, onUpdate = (
 
     const router = useRouter()
 
-    const onDeleteHandler = (params) => {
+    const onDeleteHandler = (...params) => {
         router.refresh()
         onDelete(...params)
     }
 
-    const onUpdateHandler = (params) => {
+    const onUpdateHandler = (...params) => {
         router.refresh()
         onUpdate(...params)
     }
@@ -59,7 +59,7 @@ const IssueCard = ({issue, showStatus = false, onDelete = () => {}, onUpdate = (
 
     {isDialogOpen && (<IssueDetailsDialog 
     isOpen={isDialogOpen}
-    onClose={setIsDialogOpen(false)}
+    onClose={() => setIsDialogOpen(false)}
     issue={issue}
     onDelete={onDeleteHandler}
     onUpdate={onUpdateHandler}
