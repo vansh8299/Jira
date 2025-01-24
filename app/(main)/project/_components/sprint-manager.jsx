@@ -8,10 +8,13 @@ import React, { useEffect, useState } from 'react'
 import { useFetch } from '@/hooks/use-fetch'
 import { updateSprintStatus } from '@/actions/sprint'
 import { BarLoader } from 'react-spinners'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const SprintManager = ({sprint, setSprint, sprints, projectId}) => {
     const [status, setStatus] = useState(sprint.status)
-    
+
+    const searchParams = useSearchParams()
+    const router = useRouter()
     const startDate = new Date(sprint.startDate)
     const endDate = new Date(sprint.endDate)
     const now = new Date()
@@ -38,7 +41,19 @@ const SprintManager = ({sprint, setSprint, sprints, projectId}) => {
         }))
       }
     }, [updatedStatus, setSprint]) // Removed loading and sprint from dependencies
-    
+
+    useEffect(()=>{
+const sprintId = searchParams.get("sprint")
+if(sprintId && sprintId !== sprint.id){
+  const selectedSprint =  sprints.find((s)=>s.id === sprintId)
+  if(selectedSprint){
+    setSprint(selectedSprint)
+    setStatus(selectedSprint.status)
+  }
+}
+    },[searchParams,sprints])
+
+   
     useEffect(() => {
       // Sync local status with sprint prop changes
       setStatus(sprint.status)
@@ -48,6 +63,8 @@ const SprintManager = ({sprint, setSprint, sprints, projectId}) => {
       const selectedSprint = sprints.find((s) => s.id === value)
       if (selectedSprint) {
         setSprint(selectedSprint)
+        setStatus(selectedSprint.status)
+         router.replace(`/project/${projectId}`, undefined, {shallow: true})
       }
     }
     

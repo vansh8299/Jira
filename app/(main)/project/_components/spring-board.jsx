@@ -13,6 +13,7 @@ import { BarLoader } from "react-spinners";
 import IssueCard from "@/components/issue-card";
 import { toast } from "sonner";
 import { updateIssueOrder } from "../../../../actions/issues";
+import BoardFilters from "./board-filters";
 
 //reorder
 const reorder = (list, startIndex, endIndex) => {
@@ -134,7 +135,7 @@ console.log(issues)
       />
 
       {issues && !issuesLoading && (
-        <BoardFilters />
+        <BoardFilters issues={issues} onFilterChange={handleFilterChange} />
       )}
 
       {updateIssuesError && (
@@ -159,7 +160,7 @@ console.log(issues)
                       {column.name}
                     </h3>
 
-                    {issues   ?.filter((issue) => issue.status === column.key)
+                    {filteredIssues?.filter((issue) => issue.status === column.key)
                     .map((issue, index) => (
                       <Draggable
                         key={issue.id}
