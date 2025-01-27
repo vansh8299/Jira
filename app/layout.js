@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
       appearance={{
         baseTheme: shadesOfPurple,
         variables: {
@@ -28,7 +29,6 @@ export default function RootLayout({ children }) {
           headerSubtitle: "text-gray-400",
         },
       }}
-      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} dotted-background`}>

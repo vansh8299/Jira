@@ -9,19 +9,26 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  if (!auth().userId && isProtectedRoute(req)) {
-    return auth().redirectToSignIn();
+  // Need to return the result of the auth function call
+  const session = auth();
+
+  if (!session.userId && isProtectedRoute(req)) {
+    return session.redirectToSignIn();
   }
 
   if (
-    auth().userId &&
-    !auth().orgId &&
+    session.userId &&
+    !session.orgId &&
     req.nextUrl.pathname !== "/onboarding" &&
     req.nextUrl.pathname !== "/"
   ) {
     return NextResponse.redirect(new URL("/onboarding", req.url));
   }
+
+  // Need to return NextResponse.next() if no redirects are needed
+  return NextResponse.next();
 });
+
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
